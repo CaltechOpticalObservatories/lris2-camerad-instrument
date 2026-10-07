@@ -9,4 +9,42 @@ on:
 
 jobs:
   build:
-    uses: CaltechOpticalObservatories/camera-interface/.github/workflows/instrument-ci.yml@main
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build \
+            libccfits-dev libcfitsio-dev libcurl4-openssl-dev \
+            nlohmann-json3-dev libzmq3-dev \
+            libboost-thread-dev libboost-chrono-dev
+
+      # zmqpp is not packaged for Ubuntu
+      - name: Build and install zmqpp
+        run: |
+          git clone --depth 1 https://github.com/zeromq/zmqpp.git /tmp/zmqpp
+          cmake -S /tmp/zmqpp -B /tmp/zmqpp/build
+          cmake --build /tmp/zmqpp/build -j"$(nproc)"
+          sudo cmake --install /tmp/zmqpp/build
+          sudo ldconfig
+
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build -j"$(nproc)"
+
+      - name: Install the Python module
+        run: pip install --verbose .
+
+      - name: Import the Python module
+        run: |
+          python -c "
+          import camera_interface as ci
+          assert ci.instrument_name() == 'lris2', ci.instrument_name()
+          assert ci.controller_name() == 'archon', ci.controller_name()
+          "
