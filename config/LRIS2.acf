@@ -464,6 +464,9 @@ FRAMEMODE=2
 LINECOUNT= 2060
 PIXELCOUNT= 2064
 ; ---- added for camerad, not present in the WDL source ----
+; camerad reads BIGBUF when selecting a mode and fails the load without it.
+; 0 keeps the controller's default buffer layout.
+BIGBUF=0
 ; RAW capture keys. camerad can only write config keys the loaded ACF already
 ; carries, so these must exist before "raw set" can turn capture on at runtime.
 ; RAWENABLE is 0, so nothing here changes a voltage or the timing.
