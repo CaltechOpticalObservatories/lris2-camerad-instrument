@@ -19,4 +19,20 @@ namespace Camera {
   }
   /***** Camera::LRIS2::configure_instrument **********************************/
 
+
+  /***** Camera::LRIS2::load_firmware *****************************************/
+  /**
+   * @brief      load the ACF, then select the SINGLE exposure mode
+   * @param[in]  args       ACF file name, or ? for help
+   * @param[out] retstring  return string
+   * @return     ERROR|NO_ERROR|HELP
+   *
+   */
+  long LRIS2::load_firmware(const std::string &args, std::string &retstring) {
+    const long error = ArchonInterface::load_firmware(args, retstring);
+    if (error != NO_ERROR) return error;
+    return this->set_exposure_mode(ArchonExposureMode::SINGLE, {});
+  }
+  /***** Camera::LRIS2::load_firmware *****************************************/
+
 }
