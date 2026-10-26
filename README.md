@@ -57,6 +57,10 @@ Minimal on purpose. Exposures use the standard `ArchonInterface` modes, so
 there are no LRIS2-specific exposure mode classes yet. `Camera::LRIS2` exists as
 the hook point for detector-specific behavior as it is needed.
 
+Loading the ACF selects the `SINGLE` exposure mode; change it with
+`exposure_mode`. `acfmode <name>` applies the ACF's `[MODE_<name>]` section
+and leaves the exposure mode alone.
+
 `config/LRIS2.acf` is a skeleton: no `TAPLINE` keys, a zeroed `[SYSTEM]` block,
 and none of the six RAW keys (`RAWENABLE`, `RAWSEL`, `RAWSTARTLINE`,
 `RAWENDLINE`, `RAWSTARTPIXEL`, `RAWSAMPLES`). It needs real content before the

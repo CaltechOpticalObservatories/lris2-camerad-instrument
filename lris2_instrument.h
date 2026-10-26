@@ -21,6 +21,10 @@ namespace Camera {
   class LRIS2 : public ArchonInterface {
     public:
       void configure_instrument() override;
+
+      // Loading the ACF clears the exposure mode, so select SINGLE to expose
+      // straight after a load
+      long load_firmware(const std::string &args, std::string &retstring) override;
   };
   /***** Camera::LRIS2 ********************************************************/
 }
